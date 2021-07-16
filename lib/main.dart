@@ -1,4 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cool_outfits/constants.dart';
+import 'package:cool_outfits/provider/adminMode.dart';
 import 'package:cool_outfits/provider/cartItem.dart';
 import 'package:cool_outfits/provider/modalHud.dart';
 import 'package:cool_outfits/screens/admin/addProduct.dart';
@@ -11,12 +17,8 @@ import 'package:cool_outfits/screens/login_screen.dart';
 import 'package:cool_outfits/screens/signup_screen.dart';
 import 'package:cool_outfits/screens/user/cartScreen.dart';
 import 'package:cool_outfits/screens/user/homePage.dart';
+import 'package:cool_outfits/screens/user/payment.dart';
 import 'package:cool_outfits/screens/user/productInfo.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
-import 'package:cool_outfits/provider/adminMode.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,6 +69,7 @@ class MyApp extends StatelessWidget {
                 EditProduct.id: (context) => EditProduct(),
                 ProductInfo.id: (context) => ProductInfo(),
                 CartScreen.id: (context) => CartScreen(),
+                payment.id: (context) => payment(),
                 ViewOrders.id: (context) => ViewOrders(),
                 OrderDetails.id: (context) => OrderDetails(),
               },

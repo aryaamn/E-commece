@@ -65,28 +65,28 @@ class _HomePageState extends State<HomePage> {
                 },
                 tabs: [
                   Text(
-                    'Jackets',
+                    'Earphone',
                     style: TextStyle(
                         color:
                             _tabBarIndex == 0 ? Colors.black : kUnActiveColor,
                         fontSize: _tabBarIndex == 0 ? 16 : null),
                   ),
                   Text(
-                    'T-Shirts',
+                    'Case',
                     style: TextStyle(
                         color:
                             _tabBarIndex == 1 ? Colors.black : kUnActiveColor,
                         fontSize: _tabBarIndex == 1 ? 16 : null),
                   ),
                   Text(
-                    'Trousers',
+                    'Charger',
                     style: TextStyle(
                         color:
                             _tabBarIndex == 2 ? Colors.black : kUnActiveColor,
                         fontSize: _tabBarIndex == 2 ? 16 : null),
                   ),
                   Text(
-                    'Shoes',
+                    'Tripod',
                     style: TextStyle(
                         color:
                             _tabBarIndex == 3 ? Colors.black : kUnActiveColor,
@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Discover'.toUpperCase(),
+                  'Authentic Cell Shop'.toUpperCase(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                                   products[index].pName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('\$ ${products[index].pPrice}'),
+                                Text('\Rp ${products[index].pPrice}'),
                               ],
                             ),
                           ),

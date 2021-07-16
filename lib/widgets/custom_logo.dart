@@ -14,7 +14,7 @@ class CustomLogo extends StatelessWidget {
             Positioned(
               bottom: 0,
               child: Text(
-                'Cool Outfits',
+                'Authentic Cell Shop',
                 style: TextStyle(fontFamily: 'Pacifico', fontSize: 25),
               ),
             ),

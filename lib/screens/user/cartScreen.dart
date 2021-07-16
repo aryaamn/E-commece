@@ -1,6 +1,7 @@
 import 'package:cool_outfits/constants.dart';
 import 'package:cool_outfits/models/product.dart';
 import 'package:cool_outfits/provider/cartItem.dart';
+import 'package:cool_outfits/screens/user/payment.dart';
 import 'package:cool_outfits/screens/user/productInfo.dart';
 import 'package:cool_outfits/services/store.dart';
 import 'package:cool_outfits/widgets/customMenu.dart';
@@ -83,7 +84,7 @@ class CartScreen extends StatelessWidget {
                                           ),
                                           SizedBox(height: 10),
                                           Text(
-                                            '\$${products[index].pPrice}',
+                                            '\Rp${products[index].pPrice}',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -191,6 +192,7 @@ class CartScreen extends StatelessWidget {
     AlertDialog alertDialog = AlertDialog(
       actions: [
         MaterialButton(
+          child: Text('Chose Your payment'),
           onPressed: () {
             try {
               Store _store = Store();
@@ -200,12 +202,12 @@ class CartScreen extends StatelessWidget {
               }, products);
               Scaffold.of(context).showSnackBar(
                   SnackBar(content: Text('Ordered Successfully')));
+              Navigator.pushNamed(context, payment.id);
               Navigator.pop(context);
             } catch (e) {
               print(e.message);
             }
           },
-          child: Text('Confirm'),
         )
       ],
       content: TextField(
@@ -214,7 +216,7 @@ class CartScreen extends StatelessWidget {
         },
         decoration: InputDecoration(hintText: 'Enter your address'),
       ),
-      title: Text('Total Price = \$ $price'),
+      title: Text('Total Price = \Rp $price'),
     );
     await showDialog(
         context: context,

@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "849323869337",
-    "firebase_url": "https://cool-outfits-b06e8.firebaseio.com",
-    "project_id": "cool-outfits-b06e8",
-    "storage_bucket": "cool-outfits-b06e8.appspot.com"
+    "project_number": "2579112465",
+    "project_id": "ecommerce-e8c8a",
+    "storage_bucket": "ecommerce-e8c8a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:849323869337:android:a9a56de8b7383b50dae408",
+        "mobilesdk_app_id": "1:2579112465:android:e8b56bec8c71c9901a07b0",
         "android_client_info": {
           "package_name": "com.example.cool_outfits"
         }
       },
       "oauth_client": [
         {
-          "client_id": "849323869337-lb6qp7sphk0rfc99ug8b9hjeh3rcv58o.apps.googleusercontent.com",
+          "client_id": "2579112465-ji1bletudct6lsee7efte2fi65v4237q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBq8swtot8iuDIceUOLG2Pfa5VoODxJUwM"
+          "current_key": "AIzaSyBBmfGVIUOvdsPRTCBeZ7mm6K2L7AcEPF0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "849323869337-lb6qp7sphk0rfc99ug8b9hjeh3rcv58o.apps.googleusercontent.com",
+              "client_id": "2579112465-ji1bletudct6lsee7efte2fi65v4237q.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -80,7 +80,7 @@ class _ProductInfoState extends State<ProductInfo> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            '\$${product.pPrice}',
+                            '\Rp${product.pPrice}',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
