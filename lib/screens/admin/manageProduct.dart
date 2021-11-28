@@ -28,14 +28,14 @@ class _ManageProductsState extends State<ManageProducts> {
               var data = doc.data();
 
               products.add(Product(
-                // ignore: deprecated_member_use
-                pId: doc.documentID,
-                pName: data[kProductName],
-                pPrice: data[kProductPrice],
-                pLocation: data[kProductLocation],
-                pDescription: data[kProductDescription],
-                pCategory: data[kProductCategory],
-              ));
+                  // ignore: deprecated_member_use
+                  pId: doc.documentID,
+                  pName: data[kProductName],
+                  pPrice: data[kProductPrice],
+                  pLocation: data[kProductLocation],
+                  pDescription: data[kProductDescription],
+                  pCategory: data[kProductCategory],
+                  pQuantity: data[kpQuantity]));
             }
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -56,7 +56,8 @@ class _ManageProductsState extends State<ManageProducts> {
                           MyPopupMenuItem(
                             child: Text('Edit'),
                             onClick: () {
-                              Navigator.pushNamed(context, EditProduct.id, arguments: products[index]);
+                              Navigator.pushNamed(context, EditProduct.id,
+                                  arguments: products[index]);
                             },
                           ),
                           MyPopupMenuItem(
@@ -116,5 +117,3 @@ class _ManageProductsState extends State<ManageProducts> {
     );
   }
 }
-
-

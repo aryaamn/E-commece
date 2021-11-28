@@ -12,15 +12,29 @@ class Store {
       kProductDescription: product.pDescription,
       kProductCategory: product.pCategory,
       kProductLocation: product.pLocation,
+      kpQuantity: product.pQuantity,
     });
   }
 
   Stream<QuerySnapshot> loadProducts() {
-    return _firestore.collection(kProductsCollections).snapshots();
+    return _firestore
+        .collection(kProductsCollections)
+        .where("pQuantity", isGreaterThan: 0)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> loadOrders() {
-    return _firestore.collection(kOrders).snapshots();
+    return _firestore
+        .collection(kOrders)
+        .where('status', isEqualTo: 'P')
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> loadOrdersByID(userid) {
+    return _firestore
+        .collection(kOrders)
+        .where('userid', isEqualTo: userid)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> loadOrdersDetails(documentId) {
@@ -39,6 +53,17 @@ class Store {
     _firestore.collection(kProductsCollections).doc(documentId).update(data);
   }
 
+  loadProductsId(documentId) {
+    return _firestore.collection(kProductsCollections).doc(documentId).get();
+  }
+
+  minProductsId(documentId, min) {
+    _firestore
+        .collection(kProductsCollections)
+        .doc(documentId)
+        .update({'pQuantity': min});
+  }
+
   storeOrders(data, List<Product> products) {
     var documentRef = _firestore.collection(kOrders).doc();
     documentRef.set(data);
@@ -51,5 +76,9 @@ class Store {
         kProductCategory: product.pCategory,
       });
     }
+  }
+
+  updateOrders(documentId) {
+    _firestore.collection(kOrders).doc(documentId).update({"status": "D"});
   }
 }

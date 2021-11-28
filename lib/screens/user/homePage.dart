@@ -3,6 +3,7 @@ import 'package:cool_outfits/constants.dart';
 import 'package:cool_outfits/functions.dart';
 import 'package:cool_outfits/models/product.dart';
 import 'package:cool_outfits/screens/login_screen.dart';
+import 'package:cool_outfits/screens/user/HistoryOrder.dart';
 import 'package:cool_outfits/screens/user/cartScreen.dart';
 import 'package:cool_outfits/screens/user/productInfo.dart';
 import 'package:cool_outfits/services/store.dart';
@@ -10,6 +11,9 @@ import 'package:cool_outfits/widgets/productView.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cool_outfits/services/auth.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+
+import 'Delivery.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -19,6 +23,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void secureScreen() async {
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+    await FlutterWindowManager.addFlags(
+        FlutterWindowManager.FLAG_KEEP_SCREEN_ON);
+    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_FULLSCREEN);
+  }
+
   final _auth = Auth();
 
   int _tabBarIndex = 0;
@@ -122,6 +133,16 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.pushNamed(context, CartScreen.id);
                     }),
+                GestureDetector(
+                    child: Icon(Icons.message),
+                    onTap: () {
+                      Navigator.pushNamed(context, Delivery.id);
+                    }),
+                GestureDetector(
+                    child: Icon(Icons.history),
+                    onTap: () {
+                      Navigator.pushNamed(context, HistoryOrder.id);
+                    }),
               ],
             ),
           ),
@@ -130,15 +151,16 @@ class _HomePageState extends State<HomePage> {
     ]);
   }
 
-  // @override
-  // // ignore: must_call_super
-  // void initState() {
-  //   getCurrentUser();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    secureScreen();
+    getCurrentUser();
+  }
 
-  // getCurrentUser() async {
-  //   _loggedUser = await _auth.getUser();
-  // }
+  getCurrentUser() async {
+    kGetUID = await _auth.getUserID();
+  }
 
   Widget jacketView() {
     return StreamBuilder<QuerySnapshot>(
@@ -150,14 +172,14 @@ class _HomePageState extends State<HomePage> {
             var data = doc.data();
 
             products.add(Product(
-              // ignore: deprecated_member_use
-              pId: doc.documentID,
-              pName: data[kProductName],
-              pPrice: data[kProductPrice],
-              pLocation: data[kProductLocation],
-              pDescription: data[kProductDescription],
-              pCategory: data[kProductCategory],
-            ));
+                // ignore: deprecated_member_use
+                pId: doc.documentID,
+                pName: data[kProductName],
+                pPrice: data[kProductPrice],
+                pLocation: data[kProductLocation],
+                pDescription: data[kProductDescription],
+                pCategory: data[kProductCategory],
+                pQuantity: data[kpQuantity]));
           }
           _products = [...products];
           products.clear();
@@ -198,7 +220,8 @@ class _HomePageState extends State<HomePage> {
                                   products[index].pName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text('\Rp ${products[index].pPrice}'),
+                                Text(
+                                    '\Rp ${products[index].pPrice} Stock: ${products[index].pQuantity}'),
                               ],
                             ),
                           ),

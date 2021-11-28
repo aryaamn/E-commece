@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_outfits/constants.dart';
+import 'package:cool_outfits/models/ScreanArguments.dart';
 import 'package:cool_outfits/models/product.dart';
 import 'package:cool_outfits/provider/cartItem.dart';
 import 'package:cool_outfits/screens/user/payment.dart';
@@ -8,6 +10,7 @@ import 'package:cool_outfits/widgets/customMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:cool_outfits/services/auth.dart';
 
 class CartScreen extends StatelessWidget {
   static String id = 'CartScreen';
@@ -187,6 +190,8 @@ class CartScreen extends StatelessWidget {
   }
 
   void showCustomDialog(List<Product> products, context) async {
+    final _auth = Auth();
+    final user = await _auth.getUserID();
     var price = getTotalPrice(products);
     var address;
     AlertDialog alertDialog = AlertDialog(
@@ -195,15 +200,8 @@ class CartScreen extends StatelessWidget {
           child: Text('Chose Your payment'),
           onPressed: () {
             try {
-              Store _store = Store();
-              _store.storeOrders({
-                kTotalPrice: price,
-                kAddress: address,
-              }, products);
-              Scaffold.of(context).showSnackBar(
-                  SnackBar(content: Text('Ordered Successfully')));
-              Navigator.pushNamed(context, payment.id);
               Navigator.pop(context);
+              showPaymentDialog(context, price, address, 'P', user, products);
             } catch (e) {
               print(e.message);
             }
@@ -232,4 +230,49 @@ class CartScreen extends StatelessWidget {
     }
     return price;
   }
+}
+
+getStock(List<Product> products) {}
+
+void showPaymentDialog(
+    context, price, address, status, user, List<Product> products) async {
+  AlertDialog alertDialog = AlertDialog(
+    actions: [
+      MaterialButton(
+        child: Text('Bank'),
+        onPressed: () {
+          Navigator.popAndPushNamed(context, payment.id,
+              arguments:
+                  ScreenArguments(price, address, null, status, user, 'image'));
+        },
+      ),
+      MaterialButton(
+          child: Text('COD'),
+          onPressed: () async {
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text('Ordered Successfully')));
+            Navigator.pop(context);
+            Store _store = Store();
+            _store.storeOrders({
+              kTotalPrice: price,
+              kAddress: address,
+              kStatus: 'P',
+              kUserId: user,
+            }, products);
+            for (var doc in products) {
+              DocumentSnapshot data = await _store.loadProductsId(doc.pId);
+              int min = 0;
+              min = data['pQuantity'] - doc.pQuantity;
+              _store.minProductsId(doc.pId, min);
+            }
+          })
+    ],
+    // content: TextField(),
+    title: Text('Chose Your payment'),
+  );
+  await showDialog(
+      context: context,
+      builder: (context) {
+        return alertDialog;
+      });
 }

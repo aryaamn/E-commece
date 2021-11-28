@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_outfits/constants.dart';
+import 'package:cool_outfits/models/ScreanArguments.dart';
 import 'package:cool_outfits/models/order.dart';
 import 'package:cool_outfits/screens/admin/orderDetails.dart';
 import 'package:cool_outfits/services/store.dart';
@@ -10,6 +11,7 @@ class ViewOrders extends StatelessWidget {
   final Store _store = Store();
   @override
   Widget build(BuildContext context) {
+    // CartItem cartItem = Provider.of<CartItem>(context, listen: false);
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: _store.loadOrders(),
@@ -24,6 +26,7 @@ class ViewOrders extends StatelessWidget {
               orders.add(Order(
                 totalPrice: doc.data()[kTotalPrice],
                 address: doc.data()[kAddress],
+                image: doc.data()[kImage],
                 // ignore: deprecated_member_use
                 documentId: doc.documentID,
               ));
@@ -34,7 +37,14 @@ class ViewOrders extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, OrderDetails.id,
-                        arguments: orders[index].documentId);
+                        arguments: ScreenArguments(
+                            orders[index].totalPrice,
+                            orders[index].address,
+                            orders[index].documentId,
+                            orders[index].status,
+                            orders[index].userid,
+                            orders[index].image));
+                    print(orders[index].image);
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * .2,
@@ -46,7 +56,7 @@ class ViewOrders extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Total Price = \$${orders[index].totalPrice}',
+                            'Total Price = \Rp.${orders[index].totalPrice}',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

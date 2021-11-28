@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_outfits/constants.dart';
+import 'package:cool_outfits/models/ScreanArguments.dart';
+import 'package:cool_outfits/models/order.dart';
 import 'package:cool_outfits/models/product.dart';
 import 'package:cool_outfits/services/store.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +11,10 @@ class OrderDetails extends StatelessWidget {
   Store store = Store();
   @override
   Widget build(BuildContext context) {
-    String documentId = ModalRoute.of(context).settings.arguments;
+    final args = ModalRoute.of(context).settings.arguments as ScreenArguments;
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-          stream: store.loadOrdersDetails(documentId),
+          stream: store.loadOrdersDetails(args.documentId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<Product> products = [];
@@ -21,6 +23,7 @@ class OrderDetails extends StatelessWidget {
                   pName: doc.data()[kProductName],
                   pQuantity: doc.data()[kProductQuantity],
                   pCategory: doc.data()[kProductCategory],
+                  pPrice: doc.data()[kProductPrice],
                 ));
               }
               return Column(
@@ -30,12 +33,12 @@ class OrderDetails extends StatelessWidget {
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.all(20),
                         child: Container(
-                          height: MediaQuery.of(context).size.height * .2,
+                          height: MediaQuery.of(context).size.height * .50,
                           color: kSecondaryColor,
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -61,6 +64,25 @@ class OrderDetails extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Product Price: ${products[index].pPrice}',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                args.image == null
+                                    ? Text(
+                                        'Kategori: COD',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    : Image.network(args.image,
+                                        height: 150, fit: BoxFit.fill),
                               ],
                             ),
                           ),
@@ -78,7 +100,9 @@ class OrderDetails extends StatelessWidget {
                           child: ButtonTheme(
                               buttonColor: kMainColor,
                               child: RaisedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showCustomDialog(args, store, context);
+                                },
                                 child: Text('Confirm Order'),
                               )),
                         ),
@@ -104,4 +128,35 @@ class OrderDetails extends StatelessWidget {
           }),
     );
   }
+
+  void showCustomDialog(ScreenArguments orders, store, context) async {
+    var price = orders.totalPrice; //getTotalPrice(orders.totalPrice);
+    var address = orders.address; //getAddress(orders);
+    AlertDialog alertDialog = AlertDialog(
+        actions: [
+          MaterialButton(
+            child: Text('send order'),
+            onPressed: () {
+              try {
+                store.updateOrders(orders.documentId);
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text('Ordered Successfully')));
+                Navigator.pop(context);
+              } catch (e) {
+                print(e.message);
+              }
+            },
+          )
+        ],
+        title: Text('Total Price = \Rp $price'
+            '   address =\ $address'));
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return alertDialog;
+        });
+  }
+
+  getTotalPrice(List<Order> orders) {}
+  getAddress(List<Order> orders) {}
 }

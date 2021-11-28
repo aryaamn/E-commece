@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_outfits/constants.dart';
 import 'package:cool_outfits/models/product.dart';
 import 'package:cool_outfits/provider/cartItem.dart';
 import 'package:cool_outfits/screens/user/cartScreen.dart';
+import 'package:cool_outfits/services/store.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,7 @@ class ProductInfo extends StatefulWidget {
 
 class _ProductInfoState extends State<ProductInfo> {
   int _quantity = 1;
+  int _qty;
   @override
   Widget build(BuildContext context) {
     Product product = ModalRoute.of(context).settings.arguments;
@@ -80,7 +83,7 @@ class _ProductInfoState extends State<ProductInfo> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            '\Rp${product.pPrice}',
+                            '\ Stock : ${product.pQuantity}  Rp${product.pPrice} ',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -179,9 +182,9 @@ class _ProductInfoState extends State<ProductInfo> {
     });
   }
 
-  void addToCart(context, product) {
+  Future<void> addToCart(context, product) async {
     CartItem cartItem = Provider.of<CartItem>(context, listen: false);
-    product.pQuantity = _quantity;
+    final _store = Store();
     bool exist = false;
     var productsInCart = cartItem.products;
     for (var productInCart in productsInCart) {
@@ -196,9 +199,16 @@ class _ProductInfoState extends State<ProductInfo> {
         ),
       );
     } else {
-      cartItem.addProduct(product);
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Added to Cart')));
+      DocumentSnapshot data = await _store.loadProductsId(product.pId);
+      if (data['pQuantity'] >= _quantity) {
+        product.pQuantity = _quantity;
+        cartItem.addProduct(product);
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Added to Cart')));
+      } else {
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Limit Stock')));
+      }
     }
   }
 }

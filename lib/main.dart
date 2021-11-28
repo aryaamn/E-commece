@@ -1,3 +1,6 @@
+import 'package:cool_outfits/screens/user/Delivery.dart';
+import 'package:cool_outfits/screens/user/HistoryDetails.dart';
+import 'package:cool_outfits/screens/user/HistoryOrder.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +22,7 @@ import 'package:cool_outfits/screens/user/cartScreen.dart';
 import 'package:cool_outfits/screens/user/homePage.dart';
 import 'package:cool_outfits/screens/user/payment.dart';
 import 'package:cool_outfits/screens/user/productInfo.dart';
+import 'package:flutter/foundation.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +76,9 @@ class MyApp extends StatelessWidget {
                 payment.id: (context) => payment(),
                 ViewOrders.id: (context) => ViewOrders(),
                 OrderDetails.id: (context) => OrderDetails(),
+                Delivery.id: (context) => Delivery(),
+                HistoryOrder.id: (context) => HistoryOrder(),
+                HistoryDetails.id: (context) => HistoryDetails(),
               },
             ),
           );

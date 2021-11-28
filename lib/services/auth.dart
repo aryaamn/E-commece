@@ -20,5 +20,9 @@ class Auth {
     return _auth.currentUser;
   }
 
+  Future<dynamic> getUserID() async {
+    return _auth.currentUser.uid;
+  }
+
   Future<void> signOut() async => await _auth.signOut();
 }
